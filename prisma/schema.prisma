@@ -18,4 +18,31 @@ model Board {
   imageLinkHTML String
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  lists         List[]
+}
+
+model List {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  order     Int
+  boardId   String   @db.ObjectId
+  board     Board    @relation(fields: [boardId], references: [id])
+  cards     Card[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([boardId])
+}
+
+model Card {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  order       Int
+  description String?
+  listId      String   @db.ObjectId
+  list        List     @relation(fields: [listId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([listId])
 }
